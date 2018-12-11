@@ -99,20 +99,20 @@ func (q *TradesQ) Page(page db2.PageQuery) *TradesQ {
 	case "asc":
 		q.sql = q.sql.
 			Where(`(
-					 htrd.history_operation_id > ?
-				OR (
-							htrd.history_operation_id = ?
-					AND htrd.order > ?
-				))`, op, op, idx).
+					 htrd.history_operation_id >= ?
+				AND (
+					 htrd.history_operation_id > ? OR
+					(htrd.history_operation_id = ? AND htrd.order > ?)
+				))`, op, op, op, idx).
 			OrderBy("htrd.history_operation_id asc, htrd.order asc")
 	case "desc":
 		q.sql = q.sql.
 			Where(`(
-					 htrd.history_operation_id < ?
-				OR (
-							htrd.history_operation_id = ?
-					AND htrd.order < ?
-				))`, op, op, idx).
+					 htrd.history_operation_id <= ?
+				AND (
+					 htrd.history_operation_id < ? OR
+					(htrd.history_operation_id = ? AND htrd.order < ?)
+				))`, op, op, op, idx).
 			OrderBy("htrd.history_operation_id desc, htrd.order desc")
 	}
 
