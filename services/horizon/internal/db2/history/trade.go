@@ -95,6 +95,10 @@ func (q *TradesQ) Page(page db2.PageQuery) *TradesQ {
 		idx = math.MaxInt32
 	}
 
+	// NOTE: Remember to test the queries below with EXPLAIN / EXPLAIN ANALYZE
+	// before changing them.
+	// This condition is using multicolumn index and it's easy to write it in a way that
+	// DB will perform a full table scan.
 	switch page.Order {
 	case "asc":
 		q.sql = q.sql.
